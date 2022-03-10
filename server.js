@@ -19,7 +19,7 @@ app.get('/api/songs', async(req, res, next) => {
 });
 app.post('/api/songs/:id', async(req, res, next) => {
     try{
-        const song = await TextTrackList.findByPK(req.params.id);
+        const song = await Song.findByPK(req.params.id);
         await task.destroy();
         res.sendStatus(201).send(await Song);
     }
@@ -30,7 +30,7 @@ app.post('/api/songs/:id', async(req, res, next) => {
 
 app.delete('/api/songs/:id', async(req, res, next) => {
     try{
-        const song = await TextTrackList.findByPK(req.params.id);
+        const song = await Song.findByPK(req.params.id);
         await task.destroy();
         res.sendStatus(204);
     }
