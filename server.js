@@ -9,6 +9,18 @@ const Song = sequelize.define('song', {
         allowNull: false
     }
 });
+
+Song.addSong = function() {
+    const playlist = [
+        {title: 'Started From the Bottom'},
+        {title: 'Nonstop'},
+        {title: 'HYFR'},
+        {title: 'Earned it'},
+        {title: 'Often'},
+    ]
+    return this.create(playlist.pop());
+}
+
 app.get('/api/songs', async(req, res, next) => {
     try{
         res.send(await Song.findAll());
@@ -17,27 +29,16 @@ app.get('/api/songs', async(req, res, next) => {
         next(ex);
     }
 });
-app.post('/api/songs/:id', async(req, res, next) => {
+
+app.post('/api/songs/', async(req, res, next) => {
     try{
-        const song = await Song.findByPK(req.params.id);
-        await task.destroy();
-        res.sendStatus(201).send(await Song);
+        res.status(201).send(await Song.addSong());
     }
     catch(ex) {
         next(ex);
     }
 });
 
-app.delete('/api/songs/:id', async(req, res, next) => {
-    try{
-        const song = await Song.findByPK(req.params.id);
-        await task.destroy();
-        res.sendStatus(204);
-    }
-    catch(ex) {
-        next(ex);
-    }
-});
 
 const start = async()=> {
     await sequelize.sync( {force: true} );
