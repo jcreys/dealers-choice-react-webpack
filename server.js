@@ -2,6 +2,8 @@ const Sequelize = require('sequelize')
 sequelize = new Sequelize(process.env.DATABASE_URL || 'postgres://localhost/dealers_choice_react_webpack');
 const express = require('express');
 const app = express();
+const path = require('path');
+
 
 const Song = sequelize.define('song', {
     title: {
@@ -9,18 +11,20 @@ const Song = sequelize.define('song', {
         allowNull: false
     }
 });
-
+const playlist = [
+    {title: 'Started From the Bottom'},
+    {title: 'Nonstop'},
+    {title: 'HYFR'},
+    {title: 'Earned it'},
+    {title: 'Often'},
+]
 Song.addSong = function() {
-    const playlist = [
-        {title: 'Started From the Bottom'},
-        {title: 'Nonstop'},
-        {title: 'HYFR'},
-        {title: 'Earned it'},
-        {title: 'Often'},
-    ]
-    return this.create(playlist.pop());
-}
 
+    let outputSong = playlist.pop();
+    return this.create(outputSong);
+}
+app.use('/dist', express.static(path.join(__dirname,'dist')));
+app.get('/',(req,res)=> res.sendFile(path.join(__dirname, 'index.html')));
 app.get('/api/songs', async(req, res, next) => {
     try{
         res.send(await Song.findAll());
