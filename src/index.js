@@ -19,7 +19,7 @@ class App extends React.Component{
         const response = await axios.post('/api/songs');
         const song = response.data;
         const songs = [...this.state.songs, song];
-        console.log('add song');
+        this.setState( {songs} );
     }
     render(){
         const songs = this.state.songs;
